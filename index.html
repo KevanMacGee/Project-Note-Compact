@@ -3,559 +3,107 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ChatWrapper Kanban</title>
+    <title>Kanban Board</title>
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
-    <style>
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        color: #37352f;
-        background-color: #ffffff;
-      }
-
-      .main-header {
-        padding: 16px 0;
-        border-bottom: 1px solid #e6e6e6;
-      }
-
-      .main-title {
-        font-size: 24px;
-        font-weight: 600;
-        color: #37352f;
-        margin-left: 10px;
-      }
-
-      .view-options {
-        display: flex;
-        margin: 15px 0;
-        gap: 10px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #e6e6e6;
-      }
-
-      .view-option {
-        display: flex;
-        align-items: center;
-        color: #37352f;
-        text-decoration: none;
-        font-size: 14px;
-        cursor: pointer;
-      }
-
-      .board-container {
-        overflow-x: auto;
-        padding: 10px 0;
-      }
-
-      .board-title {
-        font-size: 18px;
-        font-weight: normal;
-        margin-bottom: 15px;
-        color: #6b7280;
-      }
-
-      .kanban-column {
-        min-width: 250px;
-        background-color: #f5f5f5;
-        border-radius: 4px;
-        margin-right: 15px;
-        padding: 10px;
-      }
-
-      .column-header {
-        display: flex;
-        align-items: center;
-        padding: 10px;
-        margin-bottom: 10px;
-        font-weight: 500;
-        font-size: 14px;
-      }
-
-      .status-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        margin-right: 8px;
-      }
-
-      .column-count {
-        margin-left: 5px;
-        color: #6b7280;
-      }
-
-      .task-card {
-        background-color: #ffffff;
-        border: 1px solid #e6e6e6;
-        border-radius: 4px;
-        margin-bottom: 10px;
-        padding: 10px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        cursor: move;
-        transition: all 0.2s;
-      }
-
-      .task-card:hover {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-
-      .task-card.dragging {
-        opacity: 0.5;
-        transform: scale(0.98);
-      }
-
-      .add-task-btn {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        padding: 6px;
-        color: #6b7280;
-        font-size: 14px;
-        background: none;
-        border: none;
-        width: 100%;
-        text-align: left;
-      }
-
-      .add-task-btn:hover {
-        background-color: #f0f0f0;
-        border-radius: 4px;
-      }
-
-      /* Column specific colors */
-      .todo-dot {
-        background-color: #eb5757;
-      }
-
-      .progress-dot {
-        background-color: #2f80ed;
-      }
-
-      .done-dot {
-        background-color: #27ae60;
-      }
-
-      .holding-dot {
-        background-color: #6b7280;
-      }
-
-      /* Responsive adjustments */
-      @media (max-width: 768px) {
-        .board-container {
-          overflow-x: auto;
-          white-space: nowrap;
-        }
-        .board-columns {
-          display: flex;
-        }
-        .kanban-column {
-          display: inline-block;
-          vertical-align: top;
-          white-space: normal;
-        }
-      }
-
-      /* Drag and drop visual feedback */
-      .drag-over {
-        background-color: rgba(47, 128, 237, 0.1);
-      }
-
-      /* Empty column placeholder */
-      .empty-column-text {
-        color: #6b7280;
-        font-size: 14px;
-        text-align: center;
-        padding: 10px;
-      }
-
-      /* New task form in column */
-      .new-task-form {
-        background-color: white;
-        border: 1px solid #e6e6e6;
-        border-radius: 4px;
-        padding: 8px;
-        margin-bottom: 10px;
-      }
-
-      .new-task-input {
-        width: 100%;
-        border: none;
-        outline: none;
-        font-size: 14px;
-        padding: 4px;
-      }
-
-      .task-actions {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 5px;
-      }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="container-fluid">
-      <header class="main-header">
-        <h1 class="main-title">ChatWrapper Kanban</h1>
-      </header>
+    <div class="container-fluid p-4">
+      <h1 class="mb-5">Kanban</h1>
 
-      <!-- Kanban Board -->
-
-      <div class="board-container">
-        <div class="board-columns d-flex flex-nowrap">
-          <!-- To Do Column -->
-          <div class="kanban-column" id="todo-column" data-column="todo">
-            <div class="column-header">
-              <span class="status-dot todo-dot"></span>
-              <span>To Do</span>
-              <span class="column-count" id="todo-count">0</span>
-            </div>
-            <div class="task-list" id="todo-tasks"></div>
-            <button class="add-task-btn" data-column="todo">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-plus me-1"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
-                />
-              </svg>
-              New page
-            </button>
+      <div class="row kanban-board">
+        <!-- To Do Column -->
+        <div class="col-md-3 mb-4">
+          <div class="column-header">
+            <span class="status-indicator not-started"></span>
+            <span class="column-title">Not started</span>
+            <span class="task-count">0</span>
           </div>
-
-          <!-- In Progress Column -->
-          <div class="kanban-column" id="progress-column" data-column="progress">
-            <div class="column-header">
-              <span class="status-dot progress-dot"></span>
-              <span>In Progress</span>
-              <span class="column-count" id="progress-count">0</span>
-            </div>
-            <div class="task-list" id="progress-tasks"></div>
-            <button class="add-task-btn" data-column="progress">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-plus me-1"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
-                />
-              </svg>
-              New page
-            </button>
+          <div class="kanban-column" id="todo" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <!-- Tasks will be added here dynamically -->
           </div>
+        </div>
 
-          <!-- Done Column -->
-          <div class="kanban-column" id="done-column" data-column="done">
-            <div class="column-header">
-              <span class="status-dot done-dot"></span>
-              <span>Done</span>
-              <span class="column-count" id="done-count">0</span>
-            </div>
-            <div class="task-list" id="done-tasks"></div>
-            <button class="add-task-btn" data-column="done">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-plus me-1"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
-                />
-              </svg>
-              New page
-            </button>
+        <!-- In Progress Column -->
+        <div class="col-md-3 mb-4">
+          <div class="column-header">
+            <span class="status-indicator in-progress"></span>
+            <span class="column-title">In progress</span>
+            <span class="task-count">0</span>
           </div>
+          <div class="kanban-column" id="inprogress" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <!-- Tasks will be added here dynamically -->
+          </div>
+        </div>
 
-          <!-- Holding Area Column -->
-          <div class="kanban-column" id="holding-column" data-column="holding">
-            <div class="column-header">
-              <span class="status-dot holding-dot"></span>
-              <span>Holding Area</span>
-              <span class="column-count" id="holding-count">0</span>
-            </div>
-            <div class="task-list" id="holding-tasks"></div>
-            <button class="add-task-btn" data-column="holding">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-plus me-1"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
-                />
-              </svg>
-              New page
-            </button>
+        <!-- Done Column -->
+        <div class="col-md-3 mb-4">
+          <div class="column-header">
+            <span class="status-indicator done"></span>
+            <span class="column-title">Done</span>
+            <span class="task-count">0</span>
+          </div>
+          <div class="kanban-column" id="done" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <!-- Tasks will be added here dynamically -->
+          </div>
+        </div>
+
+        <!-- Holding Area Column -->
+        <div class="col-md-3 mb-4">
+          <div class="column-header">
+            <span class="status-indicator holding"></span>
+            <span class="column-title">Holding Area</span>
+            <span class="task-count">0</span>
+          </div>
+          <div class="kanban-column" id="holding" ondragover="allowDrop(event)" ondrop="drop(event)">
+            <!-- Tasks will be added here dynamically -->
           </div>
         </div>
       </div>
 
-      <!-- Bootstrap 5 JS Bundle with Popper -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
-      <script>
-        // Main JavaScript for Kanban Board functionality
-        document.addEventListener("DOMContentLoaded", function () {
-          // Initialize variables and elements
-          const columns = ["todo", "progress", "done", "holding"];
-          const addTaskBtns = document.querySelectorAll(".add-task-btn");
-          let activeTaskForm = null;
-
-          // Generate a unique ID for tasks
-          function generateTaskId() {
-            return Date.now().toString(36) + Math.random().toString(36).substr(2);
-          }
-
-          // Load tasks from localStorage
-          function loadTasks() {
-            let tasks = JSON.parse(localStorage.getItem("kanbanTasks")) || {
-              todo: [],
-              progress: [],
-              done: [],
-              holding: [],
-            };
-
-            // Render tasks for each column
-            columns.forEach((column) => {
-              const taskList = document.getElementById(`${column}-tasks`);
-              taskList.innerHTML = "";
-
-              tasks[column].forEach((task) => {
-                const taskCard = createTaskCard(task);
-                taskList.appendChild(taskCard);
-              });
-
-              // Update count badge
-              updateColumnCount(column);
-            });
-          }
-
-          // Save tasks to localStorage
-          function saveTasks() {
-            const tasks = {
-              todo: [],
-              progress: [],
-              done: [],
-              holding: [],
-            };
-
-            // Collect tasks from each column
-            columns.forEach((column) => {
-              const taskElements = document.querySelectorAll(`#${column}-tasks .task-card`);
-              taskElements.forEach((taskElement) => {
-                tasks[column].push({
-                  id: taskElement.getAttribute("data-id"),
-                  title: taskElement.textContent.trim(),
-                });
-              });
-
-              // Update count badge
-              updateColumnCount(column);
-            });
-
-            localStorage.setItem("kanbanTasks", JSON.stringify(tasks));
-          }
-
-          // Update the task count badge for a column
-          function updateColumnCount(column) {
-            const taskCount = document.querySelectorAll(`#${column}-tasks .task-card`).length;
-            document.getElementById(`${column}-count`).textContent = taskCount;
-          }
-
-          // Create a task card element
-          function createTaskCard(task) {
-            const taskCard = document.createElement("div");
-            taskCard.className = "task-card";
-            taskCard.setAttribute("data-id", task.id);
-            taskCard.draggable = true;
-            taskCard.textContent = task.title;
-
-            // Set up event listeners for the task card
-            setupTaskCardEvents(taskCard);
-
-            return taskCard;
-          }
-
-          // Set up drag-and-drop event listeners for a task card
-          function setupTaskCardEvents(taskCard) {
-            // Double click to edit (implement if needed)
-
-            // Drag start event
-            taskCard.addEventListener("dragstart", function (e) {
-              e.dataTransfer.setData("text/plain", taskCard.getAttribute("data-id"));
-              taskCard.classList.add("dragging");
-              setTimeout(() => {
-                taskCard.style.opacity = "0.4";
-              }, 0);
-            });
-
-            // Drag end event
-            taskCard.addEventListener("dragend", function (e) {
-              taskCard.classList.remove("dragging");
-              taskCard.style.opacity = "1";
-              document.querySelectorAll(".drag-over").forEach((el) => {
-                el.classList.remove("drag-over");
-              });
-            });
-
-            // Long press for delete function (right-click menu)
-            taskCard.addEventListener("contextmenu", function (e) {
-              e.preventDefault();
-              if (confirm("Delete this task?")) {
-                taskCard.remove();
-                saveTasks();
-              }
-            });
-          }
-
-          // Create a new task form in a column
-          function createTaskForm(column) {
-            // If there's an existing form, remove it first
-            if (activeTaskForm) {
-              activeTaskForm.remove();
-              activeTaskForm = null;
-            }
-
-            const form = document.createElement("div");
-            form.className = "new-task-form";
-            form.innerHTML = `
-                        <input type="text" class="new-task-input" placeholder="Enter task name...">
-                        <div class="task-actions mt-2">
-                            <button class="btn btn-sm btn-primary save-task">Add</button>
-                            <button class="btn btn-sm btn-light cancel-task">Cancel</button>
-                        </div>
-                    `;
-
-            const taskList = document.getElementById(`${column}-tasks`);
-            taskList.appendChild(form);
-
-            const inputField = form.querySelector(".new-task-input");
-            inputField.focus();
-
-            // Save button click event
-            form.querySelector(".save-task").addEventListener("click", function () {
-              saveNewTask(form, column);
-            });
-
-            // Cancel button click event
-            form.querySelector(".cancel-task").addEventListener("click", function () {
-              form.remove();
-              activeTaskForm = null;
-            });
-
-            // Enter key to save
-            inputField.addEventListener("keypress", function (e) {
-              if (e.key === "Enter") {
-                saveNewTask(form, column);
-              }
-            });
-
-            activeTaskForm = form;
-          }
-
-          // Save a new task from the form
-          function saveNewTask(form, column) {
-            const inputField = form.querySelector(".new-task-input");
-            const taskTitle = inputField.value.trim();
-
-            if (taskTitle !== "") {
-              const task = {
-                id: generateTaskId(),
-                title: taskTitle,
-              };
-
-              const taskCard = createTaskCard(task);
-              const taskList = document.getElementById(`${column}-tasks`);
-
-              // Replace the form with the new task
-              taskList.insertBefore(taskCard, form);
-              form.remove();
-              activeTaskForm = null;
-
-              // Save to localStorage
-              saveTasks();
-            }
-          }
-
-          // Add task button click event
-          addTaskBtns.forEach((btn) => {
-            btn.addEventListener("click", function () {
-              const column = this.getAttribute("data-column");
-              createTaskForm(column);
-            });
-          });
-
-          // Set up drag-and-drop for columns
-          columns.forEach((column) => {
-            const columnElement = document.getElementById(`${column}-column`);
-            const taskList = document.getElementById(`${column}-tasks`);
-
-            // Allow dropping on column
-            columnElement.addEventListener("dragover", function (e) {
-              e.preventDefault();
-              this.classList.add("drag-over");
-            });
-
-            // Handle drop on column
-            columnElement.addEventListener("drop", function (e) {
-              e.preventDefault();
-              this.classList.remove("drag-over");
-
-              const taskId = e.dataTransfer.getData("text/plain");
-              const draggedTask = document.querySelector(`[data-id="${taskId}"]`);
-
-              if (draggedTask) {
-                taskList.appendChild(draggedTask);
-                saveTasks();
-              }
-            });
-
-            // Handle drag leave
-            columnElement.addEventListener("dragleave", function (e) {
-              this.classList.remove("drag-over");
-            });
-          });
-
-          // Initialize the board
-          loadTasks();
-
-          // Example tasks for demonstration (uncomment if needed)
-          /*
-                if (!localStorage.getItem('kanbanTasks')) {
-                    // Add sample task to todo column
-                    const todoList = document.getElementById('todo-tasks');
-                    const sampleTask = createTaskCard({
-                        id: generateTaskId(),
-                        title: 'Markdown export'
-                    });
-                    todoList.appendChild(sampleTask);
-                    
-                    // Add sample task to progress column
-                    const progressList = document.getElementById('progress-tasks');
-                    const sampleProgressTask = createTaskCard({
-                        id: generateTaskId(),
-                        title: 'Chat history'
-                    });
-                    progressList.appendChild(sampleProgressTask);
-                    
-                    saveTasks();
-                }
-                */
-        });
-      </script>
+      <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#taskModal">Add Task</button>
     </div>
+
+    <!-- Task Modal -->
+    <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="taskModalLabel">Add New Task</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="taskForm">
+              <div class="mb-3">
+                <label for="taskTitle" class="form-label">Title</label>
+                <input type="text" class="form-control" id="taskTitle" required />
+              </div>
+              <div class="mb-3">
+                <label for="taskDescription" class="form-label">Description</label>
+                <textarea class="form-control" id="taskDescription" rows="3"></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="taskColumn" class="form-label">Column</label>
+                <select class="form-select" id="taskColumn" required>
+                  <option value="todo">Not started</option>
+                  <option value="inprogress">In Progress</option>
+                  <option value="done">Done</option>
+                  <option value="holding">Holding Area</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="saveTask">Save Task</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>
