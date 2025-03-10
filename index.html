@@ -10,7 +10,10 @@
   </head>
   <body>
     <div class="container-fluid p-4">
-      <h1 class="mb-5">Kanban</h1>
+      <div class="d-flex justify-content-between align-items-center mb-5">
+        <h1>Kanban</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskModal">Add Task</button>
+      </div>
 
       <div class="row kanban-board">
         <!-- To Do Column -->
@@ -61,8 +64,6 @@
           </div>
         </div>
       </div>
-
-      <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#taskModal">Add Task</button>
     </div>
 
     <!-- Task Modal -->
