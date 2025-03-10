@@ -80,6 +80,14 @@ function createTaskCard(task, column) {
     taskCard.addEventListener('dragstart', handleDragStart);
     taskCard.addEventListener('dragend', handleDragEnd);
     
+    // Add click handler for editing
+    taskCard.addEventListener('click', (event) => {
+        // Don't open edit modal if delete button was clicked
+        if (!event.target.classList.contains('delete-task')) {
+            openEditModal(task, column);
+        }
+    });
+    
     // Add delete button event listener
     taskCard.querySelector('.delete-task').addEventListener('click', handleDeleteTask);
     
@@ -133,7 +141,45 @@ function moveTask(id, fromColumn, toColumn) {
     }
 }
 
-// Event Handlers
+// After the existing task-related functions
+
+let editingTaskId = null;
+let editingTaskColumn = null;
+
+function openEditModal(task, column) {
+    editingTaskId = task.id;
+    editingTaskColumn = column;
+    
+    // Fill the form with task data
+    document.getElementById('taskTitle').value = task.title;
+    document.getElementById('taskDescription').value = task.description || '';
+    document.getElementById('taskColumn').value = column;
+    
+    // Open the modal
+    taskModal.show();
+}
+
+function updateTask(id, column, title, description, newColumn) {
+    const taskIndex = tasks[column].findIndex(task => task.id === id);
+    if (taskIndex === -1) return;
+
+    const updatedTask = {
+        ...tasks[column][taskIndex],
+        title,
+        description
+    };
+
+    // Remove from old column
+    tasks[column].splice(taskIndex, 1);
+    
+    // Add to new column
+    tasks[newColumn].push(updatedTask);
+    
+    saveTasks();
+    renderTasks();
+}
+
+// Modify handleSaveTask to handle both create and edit
 function handleSaveTask() {
     const titleInput = document.getElementById('taskTitle');
     const descriptionInput = document.getElementById('taskDescription');
@@ -144,7 +190,15 @@ function handleSaveTask() {
     const column = columnSelect.value;
     
     if (title) {
-        addTask(title, description, column);
+        if (editingTaskId) {
+            // Update existing task
+            updateTask(editingTaskId, editingTaskColumn, title, description, column);
+            editingTaskId = null;
+            editingTaskColumn = null;
+        } else {
+            // Create new task
+            addTask(title, description, column);
+        }
         taskModal.hide();
         taskForm.reset();
     }
