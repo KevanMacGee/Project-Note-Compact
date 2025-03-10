@@ -258,6 +258,7 @@ function drop(event) {
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
+    initDarkMode();
     saveTaskBtn.addEventListener('click', handleSaveTask);
     
     // Add drag and drop event listeners to columns
@@ -270,3 +271,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// Add after the existing event listeners
+
+// Dark Mode Toggle
+function initDarkMode() {
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    
+    // Check for saved dark mode preference
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    document.body.classList.toggle('dark-mode', isDarkMode);
+    darkModeToggle.checked = isDarkMode;
+    
+    // Add event listener for toggle changes
+    darkModeToggle.addEventListener('change', (e) => {
+        document.body.classList.toggle('dark-mode', e.target.checked);
+        localStorage.setItem('darkMode', e.target.checked);
+    });
+}

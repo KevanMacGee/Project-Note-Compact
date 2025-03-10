@@ -110,3 +110,57 @@ h1 {
         margin-bottom: 20px;
     }
 }
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #fff;
+}
+
+body.dark-mode h1 {
+    color: #fff;
+}
+
+body.dark-mode .task-card {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #fff;
+}
+
+body.dark-mode .task-card .card-text {
+    color: #adb5bd;
+}
+
+body.dark-mode .kanban-column.drop-target {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .modal-content {
+    background-color: #2d2d2d;
+    color: #fff;
+}
+
+body.dark-mode .modal-header {
+    border-bottom-color: #404040;
+}
+
+body.dark-mode .modal-footer {
+    border-top-color: #404040;
+}
+
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+    background-color: #1a1a1a;
+    border-color: #404040;
+    color: #fff;
+}
+
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select:focus {
+    background-color: #1a1a1a;
+    color: #fff;
+}
+
+body.dark-mode .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
