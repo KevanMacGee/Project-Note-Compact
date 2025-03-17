@@ -169,3 +169,40 @@ body.dark-mode .form-select:focus {
 body.dark-mode .btn-close {
     filter: invert(1) grayscale(100%) brightness(200%);
 }
+
+/* URL Collector Styles */
+.url-item {
+    transition: all 0.3s ease;
+    border-left: 4px solid #0d6efd;
+}
+
+.url-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.url-title {
+    word-break: break-all;
+    font-weight: 500;
+}
+
+.url-description {
+    color: #6c757d;
+}
+
+.empty-state {
+    padding: 3rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+.validation-message {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.url-section {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid #dee2e6;
+}
