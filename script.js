@@ -278,16 +278,30 @@ document.addEventListener('DOMContentLoaded', () => {
 // Dark Mode Toggle
 function initDarkMode() {
     const darkModeToggle = document.getElementById('darkModeToggle');
+    const lightTheme = document.getElementById('lightTheme');
+    const darkTheme = document.getElementById('darkTheme');
     
-    // Check for saved dark mode preference
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    document.body.classList.toggle('dark-mode', isDarkMode);
+    // Check for saved preference, default to dark mode if no preference
+    const isDarkMode = localStorage.getItem('darkMode') !== 'false';
+    
+    function toggleTheme(isDark) {
+        document.body.classList.toggle('dark-mode', isDark);
+        lightTheme.disabled = isDark;
+        darkTheme.disabled = !isDark;
+        localStorage.setItem('darkMode', isDark);
+        
+        // Update icon
+        const icon = darkModeToggle.nextElementSibling.querySelector('i');
+        icon.className = isDark ? 'bi bi-moon-stars-fill' : 'bi bi-sun-fill';
+    }
+    
+    // Set initial theme
+    toggleTheme(isDarkMode);
     darkModeToggle.checked = isDarkMode;
     
     // Add event listener for toggle changes
     darkModeToggle.addEventListener('change', (e) => {
-        document.body.classList.toggle('dark-mode', e.target.checked);
-        localStorage.setItem('darkMode', e.target.checked);
+        toggleTheme(e.target.checked);
     });
 }
 

@@ -26,19 +26,19 @@ h1 {
 }
 
 .not-started {
-    background-color: #6c757d;
+    background-color: #95a5a6;
 }
 
 .in-progress {
-    background-color: #0d6efd;
+    background-color: #3498db;
 }
 
 .done {
-    background-color: #198754;
+    background-color: #18bc9c;
 }
 
 .holding {
-    background-color: #ffc107;
+    background-color: #f39c12;
 }
 
 .column-title {
@@ -47,18 +47,15 @@ h1 {
 
 .task-count {
     margin-left: 8px;
-    color: #6c757d;
+    opacity: 0.7;
 }
 
 /* Kanban Columns */
 .kanban-column {
     min-height: 200px;
     padding-bottom: 20px;
-}
-
-.kanban-column {
-    min-height: 200px;
-    padding-bottom: 20px;
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.03);
 }
 
 /* Task Cards */
@@ -96,7 +93,7 @@ h1 {
 }
 
 .kanban-column.drop-target {
-    background-color: rgba(0, 0, 0, 0.03);
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 /* Delete Button */
@@ -173,7 +170,7 @@ body.dark-mode .btn-close {
 /* URL Collector Styles */
 .url-item {
     transition: all 0.3s ease;
-    border-left: 4px solid #0d6efd;
+    border-left: 4px solid #3498db;
 }
 
 .url-item:hover {
@@ -193,7 +190,7 @@ body.dark-mode .btn-close {
 .empty-state {
     padding: 3rem;
     text-align: center;
-    color: #6c757d;
+    opacity: 0.7;
 }
 
 .validation-message {
@@ -204,5 +201,19 @@ body.dark-mode .btn-close {
 .url-section {
     margin-top: 4rem;
     padding-top: 2rem;
-    border-top: 1px solid #dee2e6;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Add to styles.css */
+.form-check-label i {
+    font-size: 1.2rem;
+    vertical-align: middle;
+}
+
+#darkModeToggle:checked + .form-check-label i {
+    color: #f1c40f;  /* yellow color for moon icon in dark mode */
+}
+
+#darkModeToggle:not(:checked) + .form-check-label i::before {
+    content: "\F154";  /* sun icon code */
 }
