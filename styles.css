@@ -201,7 +201,7 @@ body.dark-mode .btn-close {
 .url-section {
     margin-top: 4rem;
     padding-top: 2rem;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 2px solid rgba(0, 0, 0, 0.2);
 }
 
 /* Add to styles.css */
@@ -210,10 +210,17 @@ body.dark-mode .btn-close {
     vertical-align: middle;
 }
 
+/* Remove or comment out this rule to use the default white color
 #darkModeToggle:checked + .form-check-label i {
-    color: #f1c40f;  /* yellow color for moon icon in dark mode */
+    color: #f1c40f;
+} */
+
+/* Update the icon code for sun */
+#darkModeToggle:not(:checked) + .form-check-label i {
+    content: "bi bi-sun";  /* remove hex code and use Bootstrap icon class */
 }
 
-#darkModeToggle:not(:checked) + .form-check-label i::before {
-    content: "\F154";  /* sun icon code */
+/* Add this to your dark mode section */
+body.dark-mode .url-section {
+    border-top-color: rgba(255, 255, 255, 0.2);
 }

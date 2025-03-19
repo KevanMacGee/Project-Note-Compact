@@ -290,7 +290,7 @@ function initDarkMode() {
         darkTheme.disabled = !isDark;
         localStorage.setItem('darkMode', isDark);
         
-        // Update icon
+        // Update icon with correct Bootstrap Icons classes
         const icon = darkModeToggle.nextElementSibling.querySelector('i');
         icon.className = isDark ? 'bi bi-moon-stars-fill' : 'bi bi-sun-fill';
     }
