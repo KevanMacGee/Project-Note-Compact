@@ -6,7 +6,7 @@ It's important to note that this is a very basic, "duct tape level" engineering 
 
 ### What this project is:
 
-* It's a hacky little, rudimentary tool to organize ToDos and relevant links when working on a project.
+* It's a hacky little rudimentary tool to organize ToDos and relevant links when working on a project.
 
 ### What it is not:
 
@@ -14,9 +14,5 @@ It's important to note that this is a very basic, "duct tape level" engineering 
 
 * Made with users in mind that are not me.
 
-* Guarenteed to not delete your data if you clear the wrong chache or browser history.
 
-### A note about the export feature:
-
-You do have the ability to export the data you entered, but it only exports it as a non-importable txt file. So basically, if the local storage fails you or you mess it up, you don't have to recall everything from memory. You do have to manually enter it if you want it back though. (I might change this in the future, for now I just can't even be bothered.)
  
