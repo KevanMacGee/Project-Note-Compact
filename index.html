@@ -410,6 +410,9 @@
         holding: [],
       };
 
+      // Initialize URL data structure
+      let urls = [];
+
       // Column names mapping for display
       const columnNames = {
         todo: "Not started",
@@ -437,6 +440,22 @@
       function saveTasks() {
         localStorage.setItem("kanbanTasks", JSON.stringify(tasks));
         updateTaskCounts();
+      }
+
+      // Save URLs to localStorage
+      function saveUrls() {
+        localStorage.setItem("urls", JSON.stringify(urls));
+      }
+
+      // Load URLs from localStorage
+      function loadUrls() {
+        const savedUrls = localStorage.getItem("urls");
+        if (savedUrls) {
+          urls = JSON.parse(savedUrls);
+          urls.forEach(({ url, description }) => {
+            addUrlToList(url, description);
+          });
+        }
       }
 
       // Generate a unique ID for tasks
@@ -658,11 +677,78 @@
         moveTask(data.id, data.column, toColumn);
       }
 
+      // Global function to add a URL to the list
+      function addUrlToList(url, description) {
+        const urlList = document.getElementById("url-list");
+        const emptyState = document.getElementById("empty-state");
+
+        if (urlList.contains(emptyState)) {
+          emptyState.remove();
+        }
+
+        const urlItem = document.createElement("div");
+        urlItem.className = "list-group-item url-item p-3 mb-2";
+
+        const displayUrl = url.replace(/^https?:\/\//, "");
+
+        urlItem.innerHTML = `
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1 url-title">
+              <a href="${url}" target="_blank" rel="noopener noreferrer">${displayUrl}</a>
+            </h5>
+            <small class="text-muted">${new Date().toLocaleTimeString()}</small>
+          </div>
+          ${description ? `<p class="mb-1 url-description">${description}</p>` : ""}
+        `;
+
+        urlList.prepend(urlItem);
+
+        // Add the URL to the JavaScript array and save to localStorage
+        urls.push({ url, description });
+        saveUrls();
+
+        const successToast = new bootstrap.Toast(document.getElementById("successToast"));
+        successToast.show();
+      }
+
+      // URL Collector functionality
+      function initUrlCollector() {
+        const urlForm = document.getElementById("url-form");
+        const urlInput = document.getElementById("url-input");
+        const descriptionInput = document.getElementById("description-input");
+        const saveUrlBtn = document.getElementById("save-url-btn");
+        const urlValidation = document.getElementById("url-validation");
+        const addUrlModal = new bootstrap.Modal(document.getElementById("addUrlModal"));
+
+        function isValidUrl(urlString) {
+          const inputElement = document.createElement("input");
+          inputElement.type = "url";
+          inputElement.value = urlString;
+          return inputElement.checkValidity();
+        }
+
+        saveUrlBtn.addEventListener("click", function () {
+          let url = urlInput.value.trim();
+          const description = descriptionInput.value.trim();
+
+          if (!isValidUrl(url)) {
+            urlValidation.textContent = "Please enter a valid URL.";
+            return;
+          }
+
+          urlValidation.textContent = "";
+          addUrlToList(url, description);
+          urlForm.reset();
+          addUrlModal.hide();
+        });
+      }
+
       // Event Listeners
       document.addEventListener("DOMContentLoaded", () => {
-        loadTasks();
-        initDarkMode();
-        initUrlCollector();
+        loadTasks(); // Load Kanban tasks
+        loadUrls(); // Load URLs
+        initDarkMode(); // Initialize dark mode
+        initUrlCollector(); // Initialize URL collector
         saveTaskBtn.addEventListener("click", handleSaveTask);
 
         // Add drag and drop event listeners to columns
@@ -705,67 +791,6 @@
         // Add event listener for toggle changes
         darkModeToggle.addEventListener("change", (e) => {
           toggleTheme(e.target.checked);
-        });
-      }
-
-      // Global function to add a URL to the list
-      function addUrlToList(url, description) {
-        const urlList = document.getElementById("url-list");
-        const emptyState = document.getElementById("empty-state");
-
-        if (urlList.contains(emptyState)) {
-          emptyState.remove();
-        }
-
-        const urlItem = document.createElement("div");
-        urlItem.className = "list-group-item url-item p-3 mb-2";
-
-        const displayUrl = url.replace(/^https?:\/\//, "");
-
-        urlItem.innerHTML = `
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1 url-title">
-              <a href="${url}" target="_blank" rel="noopener noreferrer">${displayUrl}</a>
-            </h5>
-            <small class="text-muted">${new Date().toLocaleTimeString()}</small>
-          </div>
-          ${description ? `<p class="mb-1 url-description">${description}</p>` : ""}
-        `;
-
-        urlList.prepend(urlItem);
-        const successToast = new bootstrap.Toast(document.getElementById("successToast"));
-        successToast.show();
-      }
-
-      // URL Collector functionality
-      function initUrlCollector() {
-        const urlForm = document.getElementById("url-form");
-        const urlInput = document.getElementById("url-input");
-        const descriptionInput = document.getElementById("description-input");
-        const saveUrlBtn = document.getElementById("save-url-btn");
-        const urlValidation = document.getElementById("url-validation");
-        const addUrlModal = new bootstrap.Modal(document.getElementById("addUrlModal"));
-
-        function isValidUrl(urlString) {
-          const inputElement = document.createElement("input");
-          inputElement.type = "url";
-          inputElement.value = urlString;
-          return inputElement.checkValidity();
-        }
-
-        saveUrlBtn.addEventListener("click", function () {
-          let url = urlInput.value.trim();
-          const description = descriptionInput.value.trim();
-
-          if (!isValidUrl(url)) {
-            urlValidation.textContent = "Please enter a valid URL.";
-            return;
-          }
-
-          urlValidation.textContent = "";
-          addUrlToList(url, description);
-          urlForm.reset();
-          addUrlModal.hide();
         });
       }
 
