@@ -662,7 +662,7 @@
       document.addEventListener("DOMContentLoaded", () => {
         loadTasks();
         initDarkMode();
-        initUrlCollector(); // Add this line
+        initUrlCollector();
         saveTaskBtn.addEventListener("click", handleSaveTask);
 
         // Add drag and drop event listeners to columns
@@ -708,47 +708,49 @@
         });
       }
 
+      // Global function to add a URL to the list
+      function addUrlToList(url, description) {
+        const urlList = document.getElementById("url-list");
+        const emptyState = document.getElementById("empty-state");
+
+        if (urlList.contains(emptyState)) {
+          emptyState.remove();
+        }
+
+        const urlItem = document.createElement("div");
+        urlItem.className = "list-group-item url-item p-3 mb-2";
+
+        const displayUrl = url.replace(/^https?:\/\//, "");
+
+        urlItem.innerHTML = `
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1 url-title">
+              <a href="${url}" target="_blank" rel="noopener noreferrer">${displayUrl}</a>
+            </h5>
+            <small class="text-muted">${new Date().toLocaleTimeString()}</small>
+          </div>
+          ${description ? `<p class="mb-1 url-description">${description}</p>` : ""}
+        `;
+
+        urlList.prepend(urlItem);
+        const successToast = new bootstrap.Toast(document.getElementById("successToast"));
+        successToast.show();
+      }
+
       // URL Collector functionality
       function initUrlCollector() {
         const urlForm = document.getElementById("url-form");
         const urlInput = document.getElementById("url-input");
         const descriptionInput = document.getElementById("description-input");
         const saveUrlBtn = document.getElementById("save-url-btn");
-        const urlList = document.getElementById("url-list");
-        const emptyState = document.getElementById("empty-state");
         const urlValidation = document.getElementById("url-validation");
         const addUrlModal = new bootstrap.Modal(document.getElementById("addUrlModal"));
-        const successToast = new bootstrap.Toast(document.getElementById("successToast"));
 
         function isValidUrl(urlString) {
           const inputElement = document.createElement("input");
           inputElement.type = "url";
           inputElement.value = urlString;
           return inputElement.checkValidity();
-        }
-
-        function addUrlToList(url, description) {
-          if (urlList.contains(emptyState)) {
-            emptyState.remove();
-          }
-
-          const urlItem = document.createElement("div");
-          urlItem.className = "list-group-item url-item p-3 mb-2";
-
-          const displayUrl = url.replace(/^https?:\/\//, "");
-
-          urlItem.innerHTML = `
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1 url-title">
-                <a href="${url}" target="_blank" rel="noopener noreferrer">${displayUrl}</a>
-              </h5>
-              <small class="text-muted">${new Date().toLocaleTimeString()}</small>
-            </div>
-            ${description ? `<p class="mb-1 url-description">${description}</p>` : ""}
-          `;
-
-          urlList.prepend(urlItem);
-          successToast.show();
         }
 
         saveUrlBtn.addEventListener("click", function () {
