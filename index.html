@@ -241,6 +241,8 @@
           </div>
           <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskModal">Add Task</button>
           <button class="btn btn-secondary" id="exportDataBtn">Export Data</button>
+          <button class="btn btn-secondary" id="importDataBtn">Import Data</button>
+          <input type="file" id="importFileInput" accept="application/json" style="display: none" />
         </div>
       </div>
 
@@ -793,6 +795,56 @@
 
       // Add event listener to the "Export Data" button
       document.getElementById("exportDataBtn").addEventListener("click", exportData);
+
+      // Import functionality
+      function importData(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            const importedData = JSON.parse(e.target.result);
+
+            // Validate the structure of the imported data
+            if (
+              !importedData.tasks ||
+              !importedData.urls ||
+              !importedData.tasks.todo ||
+              !importedData.tasks.inprogress ||
+              !importedData.tasks.done ||
+              !importedData.tasks.holding
+            ) {
+              alert("Invalid file structure. Please upload a valid JSON file.");
+              return;
+            }
+
+            // Update tasks and URLs
+            tasks = importedData.tasks;
+            renderTasks();
+
+            const urlList = document.getElementById("url-list");
+            urlList.innerHTML = ""; // Clear existing URLs
+            importedData.urls.forEach(({ url, description }) => {
+              addUrlToList(url, description);
+            });
+
+            alert("Data imported successfully!");
+          } catch (error) {
+            alert("Error reading file. Please upload a valid JSON file.");
+          }
+        };
+
+        reader.readAsText(file);
+      }
+
+      // Trigger file input when "Import Data" button is clicked
+      document.getElementById("importDataBtn").addEventListener("click", () => {
+        document.getElementById("importFileInput").click();
+      });
+
+      // Handle file input change event
+      document.getElementById("importFileInput").addEventListener("change", importData);
     </script>
   </body>
 </html>
