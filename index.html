@@ -438,13 +438,23 @@
 
       // Save tasks to localStorage
       function saveTasks() {
-        localStorage.setItem("kanbanTasks", JSON.stringify(tasks));
-        updateTaskCounts();
+        try {
+          localStorage.setItem("kanbanTasks", JSON.stringify(tasks));
+          updateTaskCounts();
+        } catch (error) {
+          alert("Error: Could not save tasks. Local storage may be full or inaccessible.");
+          console.error("Error saving tasks to localStorage:", error);
+        }
       }
 
       // Save URLs to localStorage
       function saveUrls() {
-        localStorage.setItem("urls", JSON.stringify(urls));
+        try {
+          localStorage.setItem("urls", JSON.stringify(urls));
+        } catch (error) {
+          alert("Error: Could not save URLs. Local storage may be full or inaccessible.");
+          console.error("Error saving URLs to localStorage:", error);
+        }
       }
 
       // Load URLs from localStorage
