@@ -27,7 +27,7 @@ This is technically a basic web app, but it is designed to be used locally only.
 - The app has the ability to export and import all data as JSON files.
   - Note: any import will overwrite all data.
 - Light and Dark modes courtesy of https://bootswatch.com/.
-- All html, css and js powering the app in written inline in one html file. Not a great feature for production, but in this instance, you get the convenience of only having one file.
+- All HTML, CSS and JS powering the app in written inline in one html file. Not a great feature for production, but in this instance, you get the convenience of only having one file.
 - Spell check should be handled by your browser.
 
 ### How to use: 
