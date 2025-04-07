@@ -913,7 +913,7 @@
             // Update tasks and URLs
             tasks = importedData.tasks;
             renderTasks();
-            saveTasks(); // Save imported tasks to localStorage
+            saveTasks(); // Save imported tasks to localStorage immediately
 
             const urlList = document.getElementById("url-list");
             urlList.innerHTML = ""; // Clear existing URLs
