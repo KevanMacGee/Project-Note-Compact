@@ -864,15 +864,8 @@
         // Gather tasks and URLs
         const data = {
           tasks: tasks, // All tasks grouped by columns
-          urls: [], // Collect URLs from the URL list
+          urls: urls, // Collect URLs directly from the `urls` array
         };
-
-        const urlItems = document.querySelectorAll(".url-item");
-        urlItems.forEach((item) => {
-          const url = item.querySelector("a").href;
-          const description = item.querySelector(".url-description")?.textContent || "";
-          data.urls.push({ url, description });
-        });
 
         // Convert data to JSON
         const jsonData = JSON.stringify(data, null, 2);
