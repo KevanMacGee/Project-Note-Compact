@@ -786,15 +786,27 @@
         const addUrlModal = new bootstrap.Modal(document.getElementById("addUrlModal"));
 
         function isValidUrl(urlString) {
-          const inputElement = document.createElement("input");
-          inputElement.type = "url";
-          inputElement.value = urlString;
-          return inputElement.checkValidity();
+          // If the URL doesn't have a protocol, add https://
+          if (!/^(?:f|ht)tps?:\/\//i.test(urlString)) {
+            urlString = "https://" + urlString;
+          }
+
+          try {
+            new URL(urlString); // Validate using the URL constructor
+            return true;
+          } catch (err) {
+            return false;
+          }
         }
 
         saveUrlBtn.addEventListener("click", function () {
           let url = urlInput.value.trim();
           const description = descriptionInput.value.trim();
+
+          // If the URL doesn't have a protocol, add https://
+          if (!/^(?:f|ht)tps?:\/\//i.test(url)) {
+            url = "https://" + url;
+          }
 
           if (!isValidUrl(url)) {
             urlValidation.textContent = "Please enter a valid URL.";
@@ -944,3 +956,4 @@
     </script>
   </body>
 </html>
+`
