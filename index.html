@@ -791,8 +791,17 @@
             urlString = "https://" + urlString;
           }
 
+          // Regular expression to validate URL structure
+          const urlPattern = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
+
+          // Check if the URL matches the pattern
+          if (!urlPattern.test(urlString)) {
+            return false;
+          }
+
+          // Validate using the URL constructor
           try {
-            new URL(urlString); // Validate using the URL constructor
+            new URL(urlString);
             return true;
           } catch (err) {
             return false;
@@ -956,4 +965,3 @@
     </script>
   </body>
 </html>
-`
