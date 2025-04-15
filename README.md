@@ -22,7 +22,7 @@ This is technically a basic web app, but it is designed to be used locally only.
   - Links aren't editable, just delete and redo if you want to change something.
 - Local storage should save your edits from session to session, but this is a slightly risky way to save data.
 - The app has the ability to export and import all data as JSON files.
-  - Note: any import will overwrite all data.
+  - Note: any import will overwrite all data. (This is on my list of "I should probably fix this but I'm not sure if I care enough to do so.")
 - Light and Dark modes courtesy of https://bootswatch.com/.
 - All HTML, CSS and JS powering the app are written inline in one html file. Not a great feature for production, but in this instance, you get the convenience of only having one file.
 - Spell check should be handled by your browser.
@@ -30,7 +30,7 @@ This is technically a basic web app, but it is designed to be used locally only.
 ### How to use: 
 
 - Simply save the index.html file to the directory you want to use it in with a unique filename. (Generally, I keep it in my gitignore folder.)
-  IMPORTANT: Each instance of this app MUST have a unique file name in order for the local storage to work correctly.
+  - IMPORTANT: :exclamation: Each instance of this app MUST have a unique file name in order for the local storage to work correctly. :exclamation: 
 - Then just open the html file in any browser to edit the cards and links.
 - Occasionally, export the data to make a back up if you like. 
 
