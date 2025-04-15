@@ -30,7 +30,7 @@ This is technically a basic web app, but it is designed to be used locally only.
 ### How to use: 
 
 - Simply save the index.html file to the directory you want to use it in with a unique filename. (Generally, I keep it in my gitignore folder.)
-  IMPORTANT: Each instance of this app MUST have a unique file name in order for the local storage to work correctly.
+  :exclamation: IMPORTANT: Each instance of this app MUST have a unique file name in order for the local storage to work correctly.
 - Then just open the html file in any browser to edit the cards and links.
 - Occasionally, export the data to make a back up if you like. 
 
