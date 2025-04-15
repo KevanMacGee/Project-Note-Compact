@@ -1,10 +1,10 @@
-# Project Notes - Compact
+# Project Notes
 
-This is a very basic tool to replace Notepad notes on projects. When I work on small side projects, I always end up with a .txt file full of To-Dos and reference URLs of resources related to the project I'm working on. This is a replacement for that.
+This is a very basic tool to replace Notepad .txt notes on projects. When I work on small side projects, I always end up with a .txt file full of To-Dos and reference URLs of resources related to the project I'm working on. This is a replacement for that.
 
 It's important to note that this is a very basic "duct tape engineering" level tool, not a really replacement for something like Notion or Evernote. It's a product of a combination of vibe coding, bouncing the code off other models for refactoring and manual review and adjustments.
 
-This is technically a basic web app, but it is designed to be used locally only. Also, think of this as a document rather than a web app. You will use a different instance of this for each project you are using it for. It isn't intented to keep track of multiple projects.
+This is technically a basic web app, but it is designed to be used locally only. Also, think of this as a document rather than a web app. You will use a different instance of this for each project you are using it for. It isn't intented to keep track of multiple projects in the same instance.
 
 ### What this project is:
 * It's a hacky little rudimentary tool to organize ToDos and relevant links when working on a project.
@@ -30,7 +30,7 @@ This is technically a basic web app, but it is designed to be used locally only.
 ### How to use: 
 
 - Simply save the index.html file to the directory you want to use it in with a unique filename. (Generally, I keep it in my gitignore folder.)
-  - IMPORTANT: :exclamation: Each instance of this app MUST have a unique file name in order for the local storage to work correctly. :exclamation: 
+  - WARNING: :warning: Each instance of this app MUST have a unique file name in order for the local storage to work correctly. :warning: 
 - Then just open the html file in any browser to edit the cards and links.
 - Occasionally, export the data to make a back up if you like. 
 
