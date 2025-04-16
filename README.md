@@ -2,7 +2,7 @@ Project status: It's just about finished except for the following:
 * Need to determine if criteria for it to accept a URL is good enough or needs to be fine tuned. (Especially local fines.)
 * Final security auditing.
 * I'm not quite done testing it on Chromium based browsers but I should have all or almost all the bugs there squashed. However it's had almost no testing on FireFox yet.
-* It needs a better description here on the README, including the addition of a demo video.
+* It needs a better description here on the README, including the addition of a demo video. I also haven't even written a repo description yet.
 
 # Project Notes
 
