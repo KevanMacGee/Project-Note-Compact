@@ -786,12 +786,22 @@
         const addUrlModal = new bootstrap.Modal(document.getElementById("addUrlModal"));
 
         function isValidUrl(urlString) {
-          // If the URL doesn't have a protocol, add https://
-          if (!/^(?:f|ht)tps?:\/\//i.test(urlString)) {
+          // Accept file:// URLs directly using only the URL constructor
+          if (/^file:\/\//i.test(urlString)) {
+            try {
+              new URL(urlString);
+              return true;
+            } catch (err) {
+              return false;
+            }
+          }
+
+          // If the URL doesn't have any protocol, add https://
+          if (!/^(?:[a-z]+:)?\/\//i.test(urlString)) {
             urlString = "https://" + urlString;
           }
 
-          // Regular expression to validate URL structure
+          // Regular expression to validate web URL structure
           const urlPattern = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/.*)?$/;
 
           // Check if the URL matches the pattern
@@ -812,8 +822,8 @@
           let url = urlInput.value.trim();
           const description = descriptionInput.value.trim();
 
-          // If the URL doesn't have a protocol, add https://
-          if (!/^(?:f|ht)tps?:\/\//i.test(url)) {
+          // Only add https:// if the URL does not start with any protocol (including file://)
+          if (!/^(?:[a-z]+:)?\/\//i.test(url)) {
             url = "https://" + url;
           }
 
