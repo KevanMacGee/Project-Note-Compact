@@ -467,42 +467,76 @@
         const savedUrls = localStorage.getItem(URLS_KEY);
         if (savedUrls) {
           urls = JSON.parse(savedUrls);
-          const urlList = document.getElementById("url-list");
-          const emptyState = document.getElementById("empty-state");
-
-          // Clear the DOM list first
-          urlList.innerHTML = "";
-
-          // Remove the empty state if URLs exist
-          if (urls.length > 0 && urlList.contains(emptyState)) {
-            emptyState.remove();
-          }
-
-          // Populate the DOM with URLs from the `urls` array
-          urls.forEach(({ url, description }) => {
-            const urlItem = document.createElement("div");
-            urlItem.className = "list-group-item url-item p-3 mb-2";
-
-            const displayUrl = url.replace(/^https?:\/\//, "");
-
-            urlItem.innerHTML = `
-              <div class="d-flex w-100 justify-content-between align-items-start">
-                <h5 class="mb-1 url-title">
-                  <a href="${url}" target="_blank" rel="noopener noreferrer">${displayUrl}</a>
-                </h5>
-                <button class="delete-url btn btn-link text-danger p-0" style="font-size: 1.25rem;">×</button>
-              </div>
-              ${description ? `<p class="mb-1 url-description">${description}</p>` : ""}
-            `;
-
-            // Add event listener to the delete button
-            urlItem.querySelector(".delete-url").addEventListener("click", () => {
-              deleteUrl(url);
-            });
-
-            urlList.prepend(urlItem);
-          });
         }
+        renderUrlList();
+      }
+
+      function renderUrlList() {
+        const urlList = document.getElementById("url-list");
+        const emptyState = document.getElementById("empty-state");
+        urlList.innerHTML = "";
+
+        if (urls.length === 0) {
+          if (!urlList.contains(emptyState)) {
+            urlList.appendChild(emptyState);
+          }
+          return;
+        }
+
+        urls.forEach(({ url, description }, idx) => {
+          const urlItem = document.createElement("div");
+          urlItem.className = "list-group-item url-item p-3 mb-2";
+          urlItem.setAttribute("draggable", "true");
+          urlItem.setAttribute("data-index", idx);
+
+          const displayUrl = url.replace(/^https?:\/\//, "");
+
+          urlItem.innerHTML = `
+            <div class="d-flex w-100 justify-content-between align-items-start">
+              <h5 class="mb-1 url-title">
+                <a href="${url}" target="_blank" rel="noopener noreferrer">${displayUrl}</a>
+              </h5>
+              <button class="delete-url text-danger" style="background: none; border: none; font-size: 1rem; cursor: pointer; padding: 0 5px;">×</button>
+            </div>
+            ${description ? `<p class="mb-1 url-description">${description}</p>` : ""}
+          `;
+
+          // Delete handler
+          urlItem.querySelector(".delete-url").addEventListener("click", () => {
+            deleteUrl(url);
+          });
+
+          // Drag and drop handlers
+          urlItem.addEventListener("dragstart", (e) => {
+            e.dataTransfer.effectAllowed = "move";
+            e.dataTransfer.setData("text/plain", idx);
+            urlItem.classList.add("dragging");
+          });
+          urlItem.addEventListener("dragend", () => {
+            urlItem.classList.remove("dragging");
+          });
+          urlItem.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            urlItem.classList.add("drag-over");
+          });
+          urlItem.addEventListener("dragleave", () => {
+            urlItem.classList.remove("drag-over");
+          });
+          urlItem.addEventListener("drop", (e) => {
+            e.preventDefault();
+            urlItem.classList.remove("drag-over");
+            const fromIdx = parseInt(e.dataTransfer.getData("text/plain"), 10);
+            const toIdx = idx;
+            if (fromIdx !== toIdx) {
+              const moved = urls.splice(fromIdx, 1)[0];
+              urls.splice(toIdx, 0, moved);
+              saveUrls();
+              renderUrlList();
+            }
+          });
+
+          urlList.appendChild(urlItem);
+        });
       }
 
       // Generate a unique ID for tasks
@@ -726,38 +760,9 @@
 
       // Global function to add a URL to the list
       function addUrlToList(url, description) {
-        const urlList = document.getElementById("url-list");
-        const emptyState = document.getElementById("empty-state");
-
-        if (urlList.contains(emptyState)) {
-          emptyState.remove();
-        }
-
-        const urlItem = document.createElement("div");
-        urlItem.className = "list-group-item url-item p-3 mb-2";
-
-        const displayUrl = url.replace(/^https?:\/\//, "");
-
-        urlItem.innerHTML = `
-          <div class="d-flex w-100 justify-content-between align-items-start">
-            <h5 class="mb-1 url-title">
-              <a href="${url}" target="_blank" rel="noopener noreferrer">${displayUrl}</a>
-            </h5>
-            <button class="delete-url text-danger" style="background: none; border: none; font-size: 1rem; cursor: pointer; padding: 0 5px;">×</button>
-          </div>
-          ${description ? `<p class="mb-1 url-description">${description}</p>` : ""}
-        `;
-
-        // Add event listener to the delete button
-        urlItem.querySelector(".delete-url").addEventListener("click", () => {
-          deleteUrl(url);
-        });
-
-        urlList.prepend(urlItem);
-
-        // Add the URL to the JavaScript array and save to localStorage
         urls.push({ url, description });
         saveUrls();
+        renderUrlList();
 
         const successToast = new bootstrap.Toast(document.getElementById("successToast"));
         successToast.show();
@@ -765,20 +770,11 @@
 
       // Global function to delete a URL
       function deleteUrl(url) {
-        // Confirm the user's choice
         const userConfirmed = confirm("Are you sure you want to delete this URL?");
-        if (!userConfirmed) {
-          return; // User canceled the deletion
-        }
-
-        // Remove the URL from the `urls` array
+        if (!userConfirmed) return;
         urls = urls.filter((item) => item.url !== url);
-
-        // Save the updated URLs to localStorage
         saveUrls();
-
-        // Re-render the URL list
-        loadUrls();
+        renderUrlList();
       }
 
       // URL Collector functionality
