@@ -1,5 +1,5 @@
 Project status: It's just about finished except for the following:
-* Need to determine if criteria for it to accept a URL is good enough or needs to be fine tuned. (Especially local fines.)
+* Done ~~Need to determine if criteria for it to accept a URL is good enough or needs to be fine tuned. (Especially local files.)~~
 * Final security auditing.
 * I'm not quite done testing it on Chromium based browsers but I should have all or almost all the bugs there squashed. However it's had almost no testing on FireFox yet.
 * It needs a better description here on the README, including the addition of a demo video. I also haven't even written a repo description yet.
@@ -24,8 +24,9 @@ This is technically a basic web app, but it is designed to be used locally only.
 - KanBan board with 4 columns and editable cards.
   - KanBan card description is optional.
   - Cards are draggable to change their status.
-- Link collection area, basically just a list of URLs with an optional description.
+- Link collection area: basically just a list of URLs with an optional description.
   - Links aren't editable, just delete and redo if you want to change something.
+- The order of the links can be dragged and dropped to change the order of the list.
 - Local storage should save your edits from session to session, but this is a slightly risky way to save data.
 - The app has the ability to export and import all data as a JSON file.
   - Note: any import will overwrite all data. (This is on my list of "I should probably fix this but I'm not sure if I care enough to do so." things)
