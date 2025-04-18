@@ -402,6 +402,11 @@
 
     <!-- Inline JavaScript -->
     <script>
+      // Use the file name as a unique key prefix for localStorage
+      const fileName = window.location.pathname.split("/").pop();
+      const TASKS_KEY = `kanbanTasks-${fileName}`;
+      const URLS_KEY = `urls-${fileName}`;
+
       // Initialize task data structure
       let tasks = {
         todo: [],
@@ -429,7 +434,7 @@
 
       // Load tasks from localStorage
       function loadTasks() {
-        const savedTasks = localStorage.getItem("kanbanTasks");
+        const savedTasks = localStorage.getItem(TASKS_KEY);
         if (savedTasks) {
           tasks = JSON.parse(savedTasks);
           renderTasks();
@@ -439,7 +444,7 @@
       // Save tasks to localStorage
       function saveTasks() {
         try {
-          localStorage.setItem("kanbanTasks", JSON.stringify(tasks));
+          localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
           updateTaskCounts();
         } catch (error) {
           alert("Error: Could not save tasks. Local storage may be full or inaccessible.");
@@ -450,7 +455,7 @@
       // Save URLs to localStorage
       function saveUrls() {
         try {
-          localStorage.setItem("urls", JSON.stringify(urls));
+          localStorage.setItem(URLS_KEY, JSON.stringify(urls));
         } catch (error) {
           alert("Error: Could not save URLs. Local storage may be full or inaccessible.");
           console.error("Error saving URLs to localStorage:", error);
@@ -459,9 +464,9 @@
 
       // Load URLs from localStorage
       function loadUrls() {
-        const savedUrls = localStorage.getItem("urls");
+        const savedUrls = localStorage.getItem(URLS_KEY);
         if (savedUrls) {
-          urls = JSON.parse(savedUrls); // Load URLs into the `urls` array
+          urls = JSON.parse(savedUrls);
           const urlList = document.getElementById("url-list");
           const emptyState = document.getElementById("empty-state");
 
