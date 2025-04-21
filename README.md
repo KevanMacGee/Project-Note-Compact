@@ -18,6 +18,7 @@ This is technically a basic web app, but it is designed to be used locally only.
 ### What it is not:
 * Perfect. 
 * Made with users in mind that are not me.
+* A replacement for Notion or Evernote
 
 ### Features:
 
